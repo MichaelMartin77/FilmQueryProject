@@ -45,10 +45,19 @@ public class FilmQueryApp {
 		int menuSelection = input.nextInt(); 
 		
 		if (menuSelection == 1) { 
-			System.out.println("Please enter a film id");
+			System.out.println("Please enter a film id: \n");
 			int filmId = input.nextInt();
+			
 			try {
 				Film film = db.findFilmById(filmId);
+				if (film == null ) {
+					System.out.println("This film does not exist");
+				} else {
+					System.out.println("Title: " + film.getTitle());
+					System.out.println("Year: " + film.getReleaseYear());
+					System.out.println("Rating: " + film.getRating());
+					System.out.println("Description: " + film.getDescription());
+				}
 			} catch (SQLException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
