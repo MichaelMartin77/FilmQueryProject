@@ -1,5 +1,6 @@
 package com.skilldistillery.filmquery.entities;
 
+import java.util.List;
 import java.util.Objects;
 
 public class Film {
@@ -15,11 +16,11 @@ public class Film {
 	private String rating;
 	private String specialFeatures;
 
+	private List<Actor> actors;
+
 	public Film() {
 		super();
 	}
-
-	
 
 	public Film(int id, String title, int languageId) {
 		super();
@@ -27,8 +28,6 @@ public class Film {
 		this.title = title;
 		this.languageId = languageId;
 	}
-
-
 
 	public Film(int id, String title, String description, Integer releaseYear, int languageId, int rentalDuration,
 			double rentalRate, int length, double replacementCost, String rating, String specialFeatures) {
@@ -45,8 +44,23 @@ public class Film {
 		this.rating = rating;
 		this.specialFeatures = specialFeatures;
 	}
-
-
+	
+	public Film(int id, String title, String description, Integer releaseYear, int languageId, int rentalDuration,
+			double rentalRate, int length, double replacementCost, String rating, String specialFeatures, List<Actor> actors) {
+		super();
+		this.id = id;
+		this.title = title;
+		this.description = description;
+		this.releaseYear = releaseYear;
+		this.languageId = languageId;
+		this.rentalDuration = rentalDuration;
+		this.rentalRate = rentalRate;
+		this.length = length;
+		this.replacementCost = replacementCost;
+		this.rating = rating;
+		this.specialFeatures = specialFeatures;
+		this.actors = actors; 
+	}
 
 	public int getId() {
 		return id;
@@ -100,6 +114,14 @@ public class Film {
 		return rentalRate;
 	}
 
+	public List<Actor> getActors() {
+		return actors;
+	}
+
+	public void setActors(List<Actor> actors) {
+		this.actors = actors;
+	}
+
 	public void setRentalRate(double rentalRate) {
 		this.rentalRate = rentalRate;
 	}
@@ -140,6 +162,14 @@ public class Film {
 	public int hashCode() {
 		return Objects.hash(description, id, languageId, length, rating, releaseYear, rentalDuration, rentalRate,
 				replacementCost, specialFeatures, title);
+	}
+
+	@Override
+	public String toString() {
+		return "Film [id=" + id + ", title=" + title + ", description=" + description + ", releaseYear=" + releaseYear
+				+ ", languageId=" + languageId + ", rentalDuration=" + rentalDuration + ", rentalRate=" + rentalRate
+				+ ", length=" + length + ", replacementCost=" + replacementCost + ", rating=" + rating
+				+ ", specialFeatures=" + specialFeatures + ", actors=" + actors + "]";
 	}
 
 	@Override

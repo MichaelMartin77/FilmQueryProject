@@ -15,6 +15,12 @@ public class Actor {
 		lastName = ln; 
 	}
 	
+	public Actor(int sagMemberNumber, String fn, String ln) {
+		this.id = sagMemberNumber; 
+		firstName = fn; 
+		lastName = ln; 
+	}
+	
 	public int getId() {
 		return id;
 	}
@@ -39,11 +45,6 @@ public class Actor {
 		this.lastName = lastName;
 	}
 
-	public Actor(int sagMemberNumber, String fn, String ln) {
-		this.id = sagMemberNumber; 
-		firstName = fn; 
-		lastName = ln; 
-	}
 	
 	@Override
 	public int hashCode() {
@@ -64,7 +65,8 @@ public class Actor {
 
 	@Override
 	public String toString() {
-		return "Actor [id=" + id + ", firstName=" + firstName + ", lastName=" + lastName + "]";
+		
+		return "Actor First Name = " + firstName + ", Last Name= " + lastName;
 	}
 	
 	
