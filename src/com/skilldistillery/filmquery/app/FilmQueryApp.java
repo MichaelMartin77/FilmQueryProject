@@ -37,36 +37,44 @@ public class FilmQueryApp {
 	}
 
 	private void startUserInterface(Scanner input) {
-		System.out.println("Welcome! Please select the following items from the list below:");
-		System.out.println("1. Look film up by it's id");
-		System.out.println("2. Look up a film by search by a search keyword");
-		System.out.println("3. Exit");
-		
-		int menuSelection = input.nextInt(); 
-		
-		if (menuSelection == 1) { 
-			System.out.println("Please enter a film id: \n");
-			int filmId = input.nextInt();
-			
-			try {
-				Film film = db.findFilmById(filmId);
-				if (film == null ) {
-					System.out.println("This film does not exist");
-				} else {
-					System.out.println("Title: " + film.getTitle());
-					System.out.println("Year: " + film.getReleaseYear());
-					System.out.println("Rating: " + film.getRating());
-					System.out.println("Description: " + film.getDescription());
+		boolean running = true;
+
+		while (running) {
+			System.out.println("Welcome! Please select the following items from the list below:");
+			System.out.println("1. Look film up by it's id");
+			System.out.println("2. Look up a film by search by a search keyword");
+			System.out.println("3. Exit");
+
+			int menuSelection = input.nextInt();
+
+			switch (menuSelection) {
+			case 1:
+				System.out.println("Please enter a film id: \n");
+				int filmId = input.nextInt();
+
+				try {
+					Film film = db.findFilmById(filmId);
+					if (film == null) {
+						System.out.println("This film does not exist");
+					} else {
+						System.out.println("Title: " + film.getTitle());
+						System.out.println("Year: " + film.getReleaseYear());
+						System.out.println("Rating: " + film.getRating());
+						System.out.println("Description: " + film.getDescription());
+						System.out.println();
+					}
+				} catch (SQLException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
 				}
-			} catch (SQLException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			} 
-			
+				break;
+			case 2:
+				System.out.println("Search Film By Keyword: ");
+				String keyword = input.next(); 
+				
+			}
 		}
+
 	}
-	
-	
-	
 
 }
