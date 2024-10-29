@@ -50,11 +50,8 @@ public class DatabaseAccessorObject implements DatabaseAccessor {
 			String rating = rs.getString("rating");
 			String specialFeatures = rs.getString("special_features");
 
-			
-			
-			List<Actor> actors = findActorsByFilmId(id); 
-	
-			
+			List<Actor> actors = findActorsByFilmId(id);
+
 			film = new Film(id, title, description, releaseYear, languageId, rentalDuration, rentalRate, length,
 					replacementCost, rating, specialFeatures, actors);
 		}
@@ -97,28 +94,28 @@ public class DatabaseAccessorObject implements DatabaseAccessor {
 
 	@Override
 	public List<Actor> findActorsByFilmId(int filmId) throws SQLException {
-		ArrayList<Actor> actors = new ArrayList<Actor>(); 
-		String name = "student"; 
-		String pwd = "student"; 
-		
+		ArrayList<Actor> actors = new ArrayList<Actor>();
+		String name = "student";
+		String pwd = "student";
+
 		String sql = "SELECT a.id, a.first_name, a.last_name FROM actor a JOIN film_actor fa ON a.id = fa.actor_id WHERE fa.film_id = ?";
-		
+
 		Connection conn = DriverManager.getConnection(URL, name, pwd);
 		PreparedStatement ps = conn.prepareStatement(sql);
-		
+
 		ps.setInt(1, filmId);
-		ResultSet rs = ps.executeQuery(); 
-		
-		while(rs.next()) {
-			int id = rs.getInt("id"); 
+		ResultSet rs = ps.executeQuery();
+
+		while (rs.next()) {
+			int id = rs.getInt("id");
 			String firstName = rs.getString("first_name");
 			String lastName = rs.getString("last_name");
-			
+
 			Actor actor = new Actor(id, firstName, lastName); // Create an Actor object
-            actors.add(actor); 
+			actors.add(actor);
 		}
-		
-		rs.close(); 
+
+		rs.close();
 		conn.close();
 		ps.close();
 		return actors;
@@ -126,8 +123,37 @@ public class DatabaseAccessorObject implements DatabaseAccessor {
 
 	@Override
 	public List<Film> searchFilmByKeyword(String keyword) {
-		// TODO Auto-generated method stub
-		return null;
+		List<Film> foundFilms = new ArrayList<>();
+		String name = "student";
+		String pwd = "student";
+		String sql = "SELECT * FROM film WHERE title LIKE ? OR description LIKE ?";
+
+		try {
+			Connection conn = DriverManager.getConnection(URL, name, pwd);
+			PreparedStatement ps = conn.prepareStatement(sql);
+
+			String searchKeyword = "%" + keyword + "%";
+			ps.setString(1, searchKeyword);
+			ps.setString(2, searchKeyword);
+			
+			
+			
+			
+			ResultSet rs = ps.executeQuery();
+			while (rs.next()) {
+				Film film = new Film();
+				film.setTitle(rs.getString("title"));
+				film.setReleaseYear(rs.getInt("release_year"));
+				film.setRating(rs.getString("rating"));
+				film.setDescription(rs.getString("description"));
+				foundFilms.add(film);
+			}
+
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		return foundFilms;
 	}
 
 }
