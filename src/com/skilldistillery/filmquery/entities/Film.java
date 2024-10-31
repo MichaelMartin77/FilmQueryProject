@@ -9,6 +9,7 @@ public class Film {
 	private String description;
 	private Integer releaseYear;
 	private int languageId;
+	private String languageName;
 	private int rentalDuration;
 	private double rentalRate;
 	private int length;
@@ -29,7 +30,7 @@ public class Film {
 		this.languageId = languageId;
 	}
 
-	public Film(int id, String title, String description, Integer releaseYear, int languageId, int rentalDuration,
+	public Film(int id, String title, String description, Integer releaseYear, int languageId, String languageName, int rentalDuration,
 			double rentalRate, int length, double replacementCost, String rating, String specialFeatures) {
 		super();
 		this.id = id;
@@ -40,6 +41,7 @@ public class Film {
 		this.rentalDuration = rentalDuration;
 		this.rentalRate = rentalRate;
 		this.length = length;
+		this.languageName = languageName;
 		this.replacementCost = replacementCost;
 		this.rating = rating;
 		this.specialFeatures = specialFeatures;
@@ -188,5 +190,17 @@ public class Film {
 				&& Double.doubleToLongBits(replacementCost) == Double.doubleToLongBits(other.replacementCost)
 				&& Objects.equals(specialFeatures, other.specialFeatures) && Objects.equals(title, other.title);
 	}
+
+	public void setLanguageName(String languageName) {
+		this.languageName = languageName;
+		
+	}
+
+	public String getLanguageName() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+
 
 }

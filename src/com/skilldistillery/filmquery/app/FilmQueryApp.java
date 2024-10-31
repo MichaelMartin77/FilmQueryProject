@@ -62,8 +62,16 @@ public class FilmQueryApp {
 						System.out.println("Year: " + film.getReleaseYear());
 						System.out.println("Rating: " + film.getRating());
 						System.out.println("Description: " + film.getDescription());
-						System.out.println();
 					}
+					// Call getLanguage to retrieve the language details
+					Film languageFilm = db.getLanguage(film.getLanguageId()); // Assuming you have a getLanguage method
+					if (languageFilm != null) {
+						System.out.println("Language: " + languageFilm.getLanguageName());
+					} else {
+						System.out.println("Language details not found.");
+					}
+
+					System.out.println();
 				} catch (SQLException e) {
 					// TODO Auto-generated catch block
 					e.printStackTrace();
@@ -71,12 +79,13 @@ public class FilmQueryApp {
 				break;
 			case 2:
 				System.out.println("Search Film By Keyword: ");
-				String keyword = input.next(); 
-				
+				String keyword = input.next();
+				input.nextLine();
+
 				List<Film> films = db.searchFilmByKeyword(keyword);
-				
+
 				if (films == null || films.isEmpty()) {
-					System.out.println("No matching films were found");
+					System.out.println("No matching films were found containing the word " + keyword);
 					System.out.println();
 				} else {
 					for (Film film : films) {
@@ -84,11 +93,11 @@ public class FilmQueryApp {
 						System.out.println("Year: " + ((Film) film).getReleaseYear());
 						System.out.println("Rating: " + ((Film) film).getRating());
 						System.out.println("Description: " + ((Film) film).getDescription());
-						System.out.println();	
+						System.out.println();
 					}
-					
+
 				}
-				
+
 			}
 		}
 

@@ -135,10 +135,7 @@ public class DatabaseAccessorObject implements DatabaseAccessor {
 			String searchKeyword = "%" + keyword + "%";
 			ps.setString(1, searchKeyword);
 			ps.setString(2, searchKeyword);
-			
-			
-			
-			
+
 			ResultSet rs = ps.executeQuery();
 			while (rs.next()) {
 				Film film = new Film();
@@ -148,12 +145,45 @@ public class DatabaseAccessorObject implements DatabaseAccessor {
 				film.setDescription(rs.getString("description"));
 				foundFilms.add(film);
 			}
-
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 		return foundFilms;
+	}
+
+	public Film getLanguage(int languageId) {
+		Film language = null;
+		String name = "student";
+		String pwd = "student";
+		String sql = "SELECT film.title, film.release_year, film.description, film.rating, language_id, language.name\n"
+				+ "FROM film JOIN language ON film.language_id = ?";
+
+		try {
+			Connection conn = DriverManager.getConnection(URL, name, pwd);
+			PreparedStatement ps = conn.prepareStatement(sql);
+
+			ps.setInt(1, languageId);
+
+			ResultSet rs = ps.executeQuery();
+			while (rs.next()) {
+				Film lang = new Film();
+				lang.setTitle(rs.getString("title"));
+				lang.setReleaseYear(rs.getInt("release_year"));
+				lang.setRating(rs.getString("rating"));
+				lang.setDescription(rs.getString("description"));
+				lang.setLanguageName(rs.getString("name"));
+
+				language = lang;
+			}
+
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+
+		return language;
+
 	}
 
 }
