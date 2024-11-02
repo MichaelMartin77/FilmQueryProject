@@ -52,8 +52,12 @@ public class DatabaseAccessorObject implements DatabaseAccessor {
 
 			List<Actor> actors = findActorsByFilmId(id);
 
+			
 			film = new Film(id, title, description, releaseYear, languageId, rentalDuration, rentalRate, length,
 					replacementCost, rating, specialFeatures, actors);
+			
+			String languageName = getLanguage(languageId);
+            film.setLanguage(languageName);
 		}
 
 		rs.close();
@@ -145,6 +149,7 @@ public class DatabaseAccessorObject implements DatabaseAccessor {
 				film.setDescription(rs.getString("description"));
 				foundFilms.add(film);
 			}
+
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -152,12 +157,11 @@ public class DatabaseAccessorObject implements DatabaseAccessor {
 		return foundFilms;
 	}
 
-	public Film getLanguage(int languageId) {
-		Film language = null;
+	public String getLanguage(int languageId) {
+		String languageName = null;
 		String name = "student";
 		String pwd = "student";
-		String sql = "SELECT film.title, film.release_year, film.description, film.rating, language_id, language.name\n"
-				+ "FROM film JOIN language ON film.language_id = ?";
+		String sql = "SELECT language.name FROM language WHERE language.id = ?";
 
 		try {
 			Connection conn = DriverManager.getConnection(URL, name, pwd);
@@ -166,23 +170,14 @@ public class DatabaseAccessorObject implements DatabaseAccessor {
 			ps.setInt(1, languageId);
 
 			ResultSet rs = ps.executeQuery();
-			while (rs.next()) {
-				Film lang = new Film();
-				lang.setTitle(rs.getString("title"));
-				lang.setReleaseYear(rs.getInt("release_year"));
-				lang.setRating(rs.getString("rating"));
-				lang.setDescription(rs.getString("description"));
-				lang.setLanguageName(rs.getString("name"));
-
-				language = lang;
+			if (rs.next()) {
+				languageName = rs.getString("name");
 			}
-
 		} catch (SQLException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 
-		return language;
+		return languageName;
 
 	}
 

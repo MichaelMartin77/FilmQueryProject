@@ -9,6 +9,7 @@ public class Film {
 	private String description;
 	private Integer releaseYear;
 	private int languageId;
+	private String language;
 	private String languageName;
 	private int rentalDuration;
 	private double rentalRate;
@@ -30,8 +31,9 @@ public class Film {
 		this.languageId = languageId;
 	}
 
-	public Film(int id, String title, String description, Integer releaseYear, int languageId, String languageName, int rentalDuration,
-			double rentalRate, int length, double replacementCost, String rating, String specialFeatures) {
+	public Film(int id, String title, String description, Integer releaseYear, int languageId, String languageName,
+			int rentalDuration, double rentalRate, int length, double replacementCost, String rating,
+			String specialFeatures) {
 		super();
 		this.id = id;
 		this.title = title;
@@ -46,9 +48,10 @@ public class Film {
 		this.rating = rating;
 		this.specialFeatures = specialFeatures;
 	}
-	
+
 	public Film(int id, String title, String description, Integer releaseYear, int languageId, int rentalDuration,
-			double rentalRate, int length, double replacementCost, String rating, String specialFeatures, List<Actor> actors) {
+			double rentalRate, int length, double replacementCost, String rating, String specialFeatures,
+			List<Actor> actors) {
 		super();
 		this.id = id;
 		this.title = title;
@@ -61,7 +64,13 @@ public class Film {
 		this.replacementCost = replacementCost;
 		this.rating = rating;
 		this.specialFeatures = specialFeatures;
-		this.actors = actors; 
+		this.actors = actors;
+	}
+
+	
+	
+	public String getLanguage1() {
+		return language;
 	}
 
 	public int getId() {
@@ -115,6 +124,11 @@ public class Film {
 	public double getRentalRate() {
 		return rentalRate;
 	}
+	
+	public void setRentalRate(double rentalRate) {
+		this.rentalRate = rentalRate;
+	}
+	
 
 	public List<Actor> getActors() {
 		return actors;
@@ -124,9 +138,6 @@ public class Film {
 		this.actors = actors;
 	}
 
-	public void setRentalRate(double rentalRate) {
-		this.rentalRate = rentalRate;
-	}
 
 	public int getLength() {
 		return length;
@@ -193,7 +204,7 @@ public class Film {
 
 	public void setLanguageName(String languageName) {
 		this.languageName = languageName;
-		
+
 	}
 
 	public String getLanguageName() {
@@ -201,6 +212,14 @@ public class Film {
 		return null;
 	}
 
+	public void setLanguage(String languageName2) {
+		// TODO Auto-generated method stub
 
+	}
+
+	public void setLanguage(Film languageName2) {
+		// TODO Auto-generated method stub
+
+	}
 
 }
