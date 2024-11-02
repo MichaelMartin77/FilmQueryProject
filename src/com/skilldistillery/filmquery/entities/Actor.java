@@ -1,11 +1,13 @@
 package com.skilldistillery.filmquery.entities;
 
+import java.util.List;
 import java.util.Objects;
 
 public class Actor {
 	private int id; 
 	private String firstName; 
 	private String lastName; 
+	private List<Actor> actors;
 	
 	// methods 
 	public Actor() { }
@@ -19,6 +21,23 @@ public class Actor {
 		this.id = sagMemberNumber; 
 		firstName = fn; 
 		lastName = ln; 
+	}
+
+	
+	public Actor(int id, String firstName, String lastName, List<Actor> actors) {
+		super();
+		this.id = id;
+		this.firstName = firstName;
+		this.lastName = lastName;
+		this.actors = actors;
+	}
+
+	public List<Actor> getActors() {
+		return actors;
+	}
+
+	public void setActors(List<Actor> actors) {
+		this.actors = actors;
 	}
 	
 	public int getId() {

@@ -131,7 +131,7 @@ public class DatabaseAccessorObject implements DatabaseAccessor {
 		List<Film> foundFilms = new ArrayList<>();
 		String name = "student";
 		String pwd = "student";
-		String sql = "SELECT film.title, film.release_year, film.rating, film.description, film.language_id, language.name FROM film JOIN language ON film.language_id = language.id WHERE film.title LIKE ? OR film.description LIKE ?";
+		String sql = "SELECT film.id, film.title, film.release_year, film.rating, film.description, film.language_id, language.name FROM film JOIN language ON film.language_id = language.id WHERE film.title LIKE ? OR film.description LIKE ?";
 
 		try {
 			Connection conn = DriverManager.getConnection(URL, name, pwd);
@@ -144,6 +144,7 @@ public class DatabaseAccessorObject implements DatabaseAccessor {
 			ResultSet rs = ps.executeQuery();
 			while (rs.next()) {
 				Film film = new Film();
+				int filmId = rs.getInt("id");
 				film.setTitle(rs.getString("title"));
 				film.setReleaseYear(rs.getInt("release_year"));
 				film.setRating(rs.getString("rating"));
@@ -152,7 +153,9 @@ public class DatabaseAccessorObject implements DatabaseAccessor {
 				film.setLanguage(rs.getString("name"));
 				String languageName = getLanguage(languageId);
 	            film.setLanguage(languageName);
-				
+	            
+	            List<Actor> actors = findActorsByFilmId(filmId); 
+	            film.setActors(actors);
 				foundFilms.add(film);
 			}
 
@@ -187,32 +190,5 @@ public class DatabaseAccessorObject implements DatabaseAccessor {
 
 	}
 	
-	public List<Actor> getFilmWithActors() {
-		List<Actor> actorList = new ArrayList<>(); 
-		String name = "student";
-		String pwd = "student";
-		String sql = "SELECT first_name, last_name FROM actor";
-		
-
-	    try (Connection conn = DriverManager.getConnection(URL, name, pwd);
-	    		PreparedStatement statement = conn.prepareStatement(sql);
-	         ResultSet resultSet = statement.executeQuery()) {
-	         
-	        while (resultSet.next()) {
-	            String firstName = resultSet.getString("first_name");
-	            String lastName = resultSet.getString("last_name");
-
-	            Actor actor = new Actor(firstName, lastName);
-	            actorList.add(actor);
-	        }
-	    } catch (SQLException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-
-		
-		return actorList;
-		
-	}
 
 }
