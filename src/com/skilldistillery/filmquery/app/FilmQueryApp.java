@@ -63,6 +63,7 @@ public class FilmQueryApp {
 						System.out.println("Rating: " + film.getRating());
 						System.out.println("Description: " + film.getDescription());
 						System.out.println("Language: " + film.getLanguage());
+						System.out.println("Actors: " + film.getActors());
 						System.out.println();
 					}
 
@@ -88,6 +89,7 @@ public class FilmQueryApp {
 						System.out.println("Rating: " +  film.getRating());
 						System.out.println("Description: " +  film.getDescription());
 						System.out.println("Language: " + film.getLanguage());
+						System.out.println("Actors: " + film.getActors());
 						System.out.println();
 					}
 

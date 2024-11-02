@@ -186,5 +186,33 @@ public class DatabaseAccessorObject implements DatabaseAccessor {
 		return languageName;
 
 	}
+	
+	public List<Actor> getFilmWithActors() {
+		List<Actor> actorList = new ArrayList<>(); 
+		String name = "student";
+		String pwd = "student";
+		String sql = "SELECT first_name, last_name FROM actor";
+		
+
+	    try (Connection conn = DriverManager.getConnection(URL, name, pwd);
+	    		PreparedStatement statement = conn.prepareStatement(sql);
+	         ResultSet resultSet = statement.executeQuery()) {
+	         
+	        while (resultSet.next()) {
+	            String firstName = resultSet.getString("first_name");
+	            String lastName = resultSet.getString("last_name");
+
+	            Actor actor = new Actor(firstName, lastName);
+	            actorList.add(actor);
+	        }
+	    } catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+
+		
+		return actorList;
+		
+	}
 
 }
