@@ -62,6 +62,7 @@ public class FilmQueryApp {
 						System.out.println("Year: " + film.getReleaseYear());
 						System.out.println("Rating: " + film.getRating());
 						System.out.println("Description: " + film.getDescription());
+						System.out.println("Language: " + film.getLanguage());
 						System.out.println();
 					}
 
@@ -82,11 +83,11 @@ public class FilmQueryApp {
 					System.out.println();
 				} else {
 					for (Film film : films) {
-						System.out.println("Title: " + ((Film) film).getTitle());
-						System.out.println("Year: " + ((Film) film).getReleaseYear());
-						System.out.println("Rating: " + ((Film) film).getRating());
-						System.out.println("Description: " + ((Film) film).getDescription());
-						System.out.println();
+						System.out.println("Title: " +  film.getTitle());
+						System.out.println("Year: " +  film.getReleaseYear());
+						System.out.println("Rating: " +  film.getRating());
+						System.out.println("Description: " +  film.getDescription());
+						System.out.println("Language: " + film.getLanguage());
 					}
 
 				}

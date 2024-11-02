@@ -10,7 +10,6 @@ public class Film {
 	private Integer releaseYear;
 	private int languageId;
 	private String language;
-	private String languageName;
 	private int rentalDuration;
 	private double rentalRate;
 	private int length;
@@ -43,7 +42,7 @@ public class Film {
 		this.rentalDuration = rentalDuration;
 		this.rentalRate = rentalRate;
 		this.length = length;
-		this.languageName = languageName;
+		this.language = languageName;
 		this.replacementCost = replacementCost;
 		this.rating = rating;
 		this.specialFeatures = specialFeatures;
@@ -69,8 +68,13 @@ public class Film {
 
 	
 	
-	public String getLanguage1() {
+	public String getLanguage() {
 		return language;
+	}
+	
+	public void setLanguage(String languageName) {
+		this.language = languageName;
+
 	}
 
 	public int getId() {
@@ -173,14 +177,13 @@ public class Film {
 
 	@Override
 	public int hashCode() {
-		return Objects.hash(description, id, languageId, length, rating, releaseYear, rentalDuration, rentalRate,
-				replacementCost, specialFeatures, title);
+		return Objects.hash(id);
 	}
 
 	@Override
 	public String toString() {
 		return "Film [id=" + id + ", title=" + title + ", description=" + description + ", releaseYear=" + releaseYear
-				+ ", languageId=" + languageId + ", rentalDuration=" + rentalDuration + ", rentalRate=" + rentalRate
+				+ ", language=" + language + ", rentalDuration=" + rentalDuration + ", rentalRate=" + rentalRate
 				+ ", length=" + length + ", replacementCost=" + replacementCost + ", rating=" + rating
 				+ ", specialFeatures=" + specialFeatures + ", actors=" + actors + "]";
 	}
@@ -194,32 +197,11 @@ public class Film {
 		if (getClass() != obj.getClass())
 			return false;
 		Film other = (Film) obj;
-		return Objects.equals(description, other.description) && id == other.id && languageId == other.languageId
-				&& length == other.length && Objects.equals(rating, other.rating)
-				&& Objects.equals(releaseYear, other.releaseYear) && rentalDuration == other.rentalDuration
-				&& Double.doubleToLongBits(rentalRate) == Double.doubleToLongBits(other.rentalRate)
-				&& Double.doubleToLongBits(replacementCost) == Double.doubleToLongBits(other.replacementCost)
-				&& Objects.equals(specialFeatures, other.specialFeatures) && Objects.equals(title, other.title);
+		return id == other.id;
 	}
 
-	public void setLanguageName(String languageName) {
-		this.languageName = languageName;
+	
 
-	}
 
-	public String getLanguageName() {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	public void setLanguage(String languageName2) {
-		// TODO Auto-generated method stub
-
-	}
-
-	public void setLanguage(Film languageName2) {
-		// TODO Auto-generated method stub
-
-	}
 
 }
