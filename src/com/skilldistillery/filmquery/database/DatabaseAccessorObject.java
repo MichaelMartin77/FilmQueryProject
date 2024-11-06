@@ -189,75 +189,61 @@ public class DatabaseAccessorObject implements DatabaseAccessor {
 		return languageName;
 
 	}
-	
+
 	public Film createFilm(Film aFilm) {
 	    String name = "student";
 	    String pwd = "student";
-	    
 	    Connection conn = null;
 
 	    try {
 	        conn = DriverManager.getConnection(URL, name, pwd);
-	        // start a transaction
+	        
 	        conn.setAutoCommit(false);
 
-	        String sql = "INSERT INTO film (title, description, release_year, language_id, rental_duration, rental_rate, length, replacement_cost, rating, special_features) "
-	                + "VALUES (?, ?, ?, 1, ?, ?, ?, ?, ?, ?)";
-
-	        // compile / optimize the sql into the db, and request the generated keys be accessible
+	        
+	        String sql = "INSERT INTO film (title, language_id, rental_rate, replacement_cost) VALUES (?, 1, ?, ?)";
+	        
+	        
 	        PreparedStatement stmt = conn.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS);
 
-	        // bind (assign) the film properties into our sql statements bind vars
+	        
 	        stmt.setString(1, aFilm.getTitle());
-	        stmt.setString(2, aFilm.getDescription());
-	        stmt.setInt(3, aFilm.getReleaseYear());
-	        stmt.setInt(4, aFilm.getRentalDuration());
-	        stmt.setDouble(5, aFilm.getRentalRate());
-	        stmt.setInt(6, aFilm.getLength());
-	        stmt.setDouble(7, aFilm.getReplacementCost());
-	        stmt.setString(8, aFilm.getRating());
-	        stmt.setString(9, aFilm.getSpecialFeatures());
+	        stmt.setDouble(2, aFilm.getRentalRate());
+	        stmt.setDouble(3, aFilm.getReplacementCost());
 
-	        // run the query in the database
+	        
 	        int updateCount = stmt.executeUpdate();
 
-	        // check if the INSERT was successful in creating 1 new Film
 	        if (updateCount == 1) {
-	            // good news: we can grab this new Film's id
+	            
 	            ResultSet keys = stmt.getGeneratedKeys();
-
-	            // we're expecting just 1 generated key
 	            if (keys.next()) {
-	                // grab the generated key (id)
 	                int newFilmId = keys.getInt(1);
-
-	                // change the initial id in our Java entity to film's 'real' id
 	                aFilm.setId(newFilmId);
 	            }
-
-	            // an explicit commit of the transaction is required to prevent a rollback
-	            conn.commit();
-
+	            conn.commit(); 
 	        } else {
-	            // something went wrong with the INSERT
-	            aFilm = null;
+	            aFilm = null; 
 	        }
-
-	        conn.close();
 
 	    } catch (SQLException sqle) {
 	        sqle.printStackTrace();
-	        if (conn != null) {
-	            try {
-	                conn.rollback();
-	            } catch (SQLException sqle2) {
-	                System.err.println("Error trying to rollback");
+	        try {
+	            if (conn != null) {
+	                conn.rollback(); 
 	            }
+	        } catch (SQLException sqle2) {
+	            System.err.println("Error trying to rollback");
 	        }
 	        throw new RuntimeException("Error inserting film " + aFilm);
+	    } finally {
+	        try {
+	            if (conn != null) conn.close(); 
+	        } catch (SQLException e) {
+	            e.printStackTrace();
+	        }
 	    }
 
-	    return aFilm;
+	    return aFilm; 
 	}
-
 }

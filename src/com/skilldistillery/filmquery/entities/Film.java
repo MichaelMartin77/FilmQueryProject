@@ -77,6 +77,12 @@ public class Film {
 		this.specialFeatures = specialFeatures;
 		this.actors = actors;
 	}
+	
+	public Film (String title, double rentalRate, double replacementCost) {
+		this.title = title; 
+		this.rentalRate = rentalRate; 
+		this.replacementCost = replacementCost; 
+	}
 
 	
 	

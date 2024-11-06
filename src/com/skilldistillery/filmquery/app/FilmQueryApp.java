@@ -106,35 +106,25 @@ public class FilmQueryApp {
 				String title = input.nextLine();
 				input.nextLine();
 
-				System.out.println("Please enter the film description: ");
-				String description = input.nextLine();
-
-				System.out.println("Please enter the film release year: ");
-				int releaseYear = input.nextInt();
-
-				System.out.println("Please enter the film rental duration: ");
-				int rentalDuration = input.nextInt();
-
-				System.out.println("Please enter the film rental rate ");
+				System.out.println("Please enter the film rental rate: ");
 				double rentalRate = input.nextDouble();
-
-				System.out.println("Please enter the film length (in minutes): ");
-				int length = input.nextInt();
 
 				System.out.println("Please enter the replacement cost: ");
 				double replacementCost = input.nextDouble();
 				input.nextLine(); // Consume newline character
 
-				System.out.println("Please enter the film rating: ");
-				String rating = input.nextLine();
+				// Only these attributes are required
+				Film newFilm = new Film(title, rentalRate, replacementCost);
+				Film createdFilm = db.createFilm(newFilm);
 
-				System.out.println("Please enter the special features: ");
-				String specialFeatures = input.nextLine();
-				 
-				Film newFilm = new Film(title, description, releaseYear, rentalDuration, rentalRate, length, replacementCost, rating, specialFeatures);
-					Film createdFilm = db.createFilm(newFilm);
-				 
-				
+				if (createdFilm != null) {
+					System.out.println("Film added successfully! Generated ID: " + createdFilm.getId());
+					System.out.println();
+				} else {
+					System.out.println("Failed to add film.");
+					System.out.println();
+				}
+				break;
 
 			case 4:
 				System.out.println();
