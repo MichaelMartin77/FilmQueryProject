@@ -5,6 +5,7 @@ import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -52,13 +53,12 @@ public class DatabaseAccessorObject implements DatabaseAccessor {
 
 			List<Actor> actors = findActorsByFilmId(id);
 
-			
 			film = new Film(id, title, description, releaseYear, languageId, rentalDuration, rentalRate, length,
 					replacementCost, rating, specialFeatures, actors);
-			
+
 			String languageName = getLanguage(languageId);
-            film.setLanguage(languageName);
-            
+			film.setLanguage(languageName);
+
 		}
 
 		rs.close();
@@ -152,10 +152,10 @@ public class DatabaseAccessorObject implements DatabaseAccessor {
 				int languageId = rs.getInt("language_id");
 				film.setLanguage(rs.getString("name"));
 				String languageName = getLanguage(languageId);
-	            film.setLanguage(languageName);
-	            
-	            List<Actor> actors = findActorsByFilmId(filmId); 
-	            film.setActors(actors);
+				film.setLanguage(languageName);
+
+				List<Actor> actors = findActorsByFilmId(filmId);
+				film.setActors(actors);
 				foundFilms.add(film);
 			}
 
@@ -190,5 +190,74 @@ public class DatabaseAccessorObject implements DatabaseAccessor {
 
 	}
 	
+	public Film createFilm(Film aFilm) {
+	    String name = "student";
+	    String pwd = "student";
+	    
+	    Connection conn = null;
+
+	    try {
+	        conn = DriverManager.getConnection(URL, name, pwd);
+	        // start a transaction
+	        conn.setAutoCommit(false);
+
+	        String sql = "INSERT INTO film (title, description, release_year, language_id, rental_duration, rental_rate, length, replacement_cost, rating, special_features) "
+	                + "VALUES (?, ?, ?, 1, ?, ?, ?, ?, ?, ?)";
+
+	        // compile / optimize the sql into the db, and request the generated keys be accessible
+	        PreparedStatement stmt = conn.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS);
+
+	        // bind (assign) the film properties into our sql statements bind vars
+	        stmt.setString(1, aFilm.getTitle());
+	        stmt.setString(2, aFilm.getDescription());
+	        stmt.setInt(3, aFilm.getReleaseYear());
+	        stmt.setInt(4, aFilm.getRentalDuration());
+	        stmt.setDouble(5, aFilm.getRentalRate());
+	        stmt.setInt(6, aFilm.getLength());
+	        stmt.setDouble(7, aFilm.getReplacementCost());
+	        stmt.setString(8, aFilm.getRating());
+	        stmt.setString(9, aFilm.getSpecialFeatures());
+
+	        // run the query in the database
+	        int updateCount = stmt.executeUpdate();
+
+	        // check if the INSERT was successful in creating 1 new Film
+	        if (updateCount == 1) {
+	            // good news: we can grab this new Film's id
+	            ResultSet keys = stmt.getGeneratedKeys();
+
+	            // we're expecting just 1 generated key
+	            if (keys.next()) {
+	                // grab the generated key (id)
+	                int newFilmId = keys.getInt(1);
+
+	                // change the initial id in our Java entity to film's 'real' id
+	                aFilm.setId(newFilmId);
+	            }
+
+	            // an explicit commit of the transaction is required to prevent a rollback
+	            conn.commit();
+
+	        } else {
+	            // something went wrong with the INSERT
+	            aFilm = null;
+	        }
+
+	        conn.close();
+
+	    } catch (SQLException sqle) {
+	        sqle.printStackTrace();
+	        if (conn != null) {
+	            try {
+	                conn.rollback();
+	            } catch (SQLException sqle2) {
+	                System.err.println("Error trying to rollback");
+	            }
+	        }
+	        throw new RuntimeException("Error inserting film " + aFilm);
+	    }
+
+	    return aFilm;
+	}
 
 }

@@ -13,7 +13,7 @@ public class FilmQueryApp {
 
 	DatabaseAccessor db = new DatabaseAccessorObject();
 
-	public static void main(String[] args) {
+	public static void main(String[] args) throws SQLException {
 		FilmQueryApp app = new FilmQueryApp();
 		app.launch();
 //    app.launch();
@@ -32,18 +32,24 @@ public class FilmQueryApp {
 
 	private void launch() {
 		Scanner input = new Scanner(System.in);
-		startUserInterface(input);
+		try {
+			startUserInterface(input);
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 		input.close();
 	}
 
-	private void startUserInterface(Scanner input) {
+	private void startUserInterface(Scanner input) throws SQLException {
 		boolean running = true;
 
 		while (running) {
 			System.out.println("Welcome! Please select the following items from the list below:");
 			System.out.println("1. Look film up by it's id");
 			System.out.println("2. Look up a film by a search keyword");
-			System.out.println("3. Exit");
+			System.out.println("3. Add New Film");
+			System.out.println("4. Exit");
 
 			int menuSelection = input.nextInt();
 
@@ -84,10 +90,10 @@ public class FilmQueryApp {
 					System.out.println();
 				} else {
 					for (Film film : films) {
-						System.out.println("Title: " +  film.getTitle());
-						System.out.println("Year: " +  film.getReleaseYear());
-						System.out.println("Rating: " +  film.getRating());
-						System.out.println("Description: " +  film.getDescription());
+						System.out.println("Title: " + film.getTitle());
+						System.out.println("Year: " + film.getReleaseYear());
+						System.out.println("Rating: " + film.getRating());
+						System.out.println("Description: " + film.getDescription());
 						System.out.println("Language: " + film.getLanguage());
 						System.out.println("Actors: " + film.getActors());
 						System.out.println();
@@ -96,9 +102,44 @@ public class FilmQueryApp {
 				}
 				break;
 			case 3:
+				System.out.println("Please enter the film title: ");
+				String title = input.nextLine();
+				input.nextLine();
+
+				System.out.println("Please enter the film description: ");
+				String description = input.nextLine();
+
+				System.out.println("Please enter the film release year: ");
+				int releaseYear = input.nextInt();
+
+				System.out.println("Please enter the film rental duration: ");
+				int rentalDuration = input.nextInt();
+
+				System.out.println("Please enter the film rental rate ");
+				double rentalRate = input.nextDouble();
+
+				System.out.println("Please enter the film length (in minutes): ");
+				int length = input.nextInt();
+
+				System.out.println("Please enter the replacement cost: ");
+				double replacementCost = input.nextDouble();
+				input.nextLine(); // Consume newline character
+
+				System.out.println("Please enter the film rating: ");
+				String rating = input.nextLine();
+
+				System.out.println("Please enter the special features: ");
+				String specialFeatures = input.nextLine();
+				 
+				Film newFilm = new Film(title, description, releaseYear, rentalDuration, rentalRate, length, replacementCost, rating, specialFeatures);
+					Film createdFilm = db.createFilm(newFilm);
+				 
+				
+
+			case 4:
 				System.out.println();
 				System.out.println("Exiting.... \nGoodBye");
-				running = false; 
+				running = false;
 				break;
 			}
 

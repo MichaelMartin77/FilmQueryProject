@@ -12,4 +12,5 @@ public interface DatabaseAccessor {
   public List<Actor> findActorsByFilmId(int filmId) throws SQLException;
   public List<Film> searchFilmByKeyword(String keyword);
   public String getLanguage(int languageId); 
+  public Film createFilm(Film aFilm); 
 }	
