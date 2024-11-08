@@ -13,4 +13,5 @@ public interface DatabaseAccessor {
   public List<Film> searchFilmByKeyword(String keyword);
   public String getLanguage(int languageId); 
   public Film createFilm(Film aFilm); 
+  public boolean deleteFilm(Film aFilm); 
 }	

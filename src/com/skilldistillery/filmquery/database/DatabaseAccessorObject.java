@@ -191,59 +191,102 @@ public class DatabaseAccessorObject implements DatabaseAccessor {
 	}
 
 	public Film createFilm(Film aFilm) {
-	    String name = "student";
-	    String pwd = "student";
-	    Connection conn = null;
+		String name = "student";
+		String pwd = "student";
+		Connection conn = null;
 
-	    try {
-	        conn = DriverManager.getConnection(URL, name, pwd);
-	        
-	        conn.setAutoCommit(false);
+		try {
+			conn = DriverManager.getConnection(URL, name, pwd);
 
-	        
-	        String sql = "INSERT INTO film (title, language_id, rental_rate, replacement_cost) VALUES (?, 1, ?, ?)";
-	        
-	        
-	        PreparedStatement stmt = conn.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS);
+			conn.setAutoCommit(false);
 
-	        
-	        stmt.setString(1, aFilm.getTitle());
-	        stmt.setDouble(2, aFilm.getRentalRate());
-	        stmt.setDouble(3, aFilm.getReplacementCost());
+			String sql = "INSERT INTO film (title, language_id, rental_rate, replacement_cost) VALUES (?, 1, ?, ?)";
 
-	        
-	        int updateCount = stmt.executeUpdate();
+			PreparedStatement stmt = conn.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS);
 
-	        if (updateCount == 1) {
-	            
-	            ResultSet keys = stmt.getGeneratedKeys();
-	            if (keys.next()) {
-	                int newFilmId = keys.getInt(1);
-	                aFilm.setId(newFilmId);
-	            }
-	            conn.commit(); 
-	        } else {
-	            aFilm = null; 
-	        }
+			stmt.setString(1, aFilm.getTitle());
+			stmt.setDouble(2, aFilm.getRentalRate());
+			stmt.setDouble(3, aFilm.getReplacementCost());
 
-	    } catch (SQLException sqle) {
-	        sqle.printStackTrace();
-	        try {
-	            if (conn != null) {
-	                conn.rollback(); 
-	            }
-	        } catch (SQLException sqle2) {
-	            System.err.println("Error trying to rollback");
-	        }
-	        throw new RuntimeException("Error inserting film " + aFilm);
-	    } finally {
-	        try {
-	            if (conn != null) conn.close(); 
-	        } catch (SQLException e) {
-	            e.printStackTrace();
-	        }
-	    }
+			int updateCount = stmt.executeUpdate();
 
-	    return aFilm; 
+			if (updateCount == 1) {
+
+				ResultSet keys = stmt.getGeneratedKeys();
+				if (keys.next()) {
+					int newFilmId = keys.getInt(1);
+					aFilm.setId(newFilmId);
+				}
+				conn.commit();
+			} else {
+				aFilm = null;
+			}
+
+		} catch (SQLException sqle) {
+			sqle.printStackTrace();
+			try {
+				if (conn != null) {
+					conn.rollback();
+				}
+			} catch (SQLException sqle2) {
+				System.err.println("Error trying to rollback");
+			}
+			throw new RuntimeException("Error inserting film " + aFilm);
+		} finally {
+			try {
+				if (conn != null)
+					conn.close();
+			} catch (SQLException e) {
+				e.printStackTrace();
+			}
+		}
+
+		return aFilm;
+	}
+
+	@Override
+	public boolean deleteFilm(Film aFilm) {
+		String name = "student";
+		String pwd = "student";
+		Connection conn = null;
+
+		try {
+			conn = DriverManager.getConnection(URL, name, pwd);
+			// start transaction
+			conn.setAutoCommit(false);
+
+			// film_actor is a child of (depends upon) both actor and film tables
+			String sql = "DELETE FROM film WHERE id = ?";
+			PreparedStatement stmt = conn.prepareStatement(sql);
+			stmt.setInt(1, aFilm.getId());
+			
+			int affectRows = stmt.executeUpdate();
+			
+			if(affectRows == 0) {
+				conn.rollback();
+				return false; 
+			}
+
+//			conn.commit();
+			
+		} catch (SQLException sqle) {
+			sqle.printStackTrace();
+			if (conn != null) {
+				try {
+					conn.rollback();
+				} catch (SQLException sqle2) {
+					return false;
+				} finally {
+					try {
+						conn.close();
+					} catch (SQLException e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					}
+				}
+			}
+		}
+		return true;
+
 	}
 }

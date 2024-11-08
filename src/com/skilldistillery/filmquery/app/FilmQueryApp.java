@@ -49,7 +49,8 @@ public class FilmQueryApp {
 			System.out.println("1. Look film up by it's id");
 			System.out.println("2. Look up a film by a search keyword");
 			System.out.println("3. Add New Film");
-			System.out.println("4. Exit");
+			System.out.println("4. Delete a Film");
+			System.out.println("5. Exit");
 
 			int menuSelection = input.nextInt();
 
@@ -108,12 +109,13 @@ public class FilmQueryApp {
 
 				System.out.println("Please enter the film rental rate: ");
 				double rentalRate = input.nextDouble();
+				input.nextLine();
 
 				System.out.println("Please enter the replacement cost: ");
 				double replacementCost = input.nextDouble();
-				input.nextLine(); // Consume newline character
+				input.nextLine();
 
-				// Only these attributes are required
+				
 				Film newFilm = new Film(title, rentalRate, replacementCost);
 				Film createdFilm = db.createFilm(newFilm);
 
@@ -125,8 +127,11 @@ public class FilmQueryApp {
 					System.out.println();
 				}
 				break;
-
 			case 4:
+				System.out.println("Delete");
+				
+				break; 
+			case 5:
 				System.out.println();
 				System.out.println("Exiting.... \nGoodBye");
 				running = false;
