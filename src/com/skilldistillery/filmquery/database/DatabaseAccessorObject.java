@@ -244,49 +244,92 @@ public class DatabaseAccessorObject implements DatabaseAccessor {
 		return aFilm;
 	}
 
+
 	@Override
-	public boolean deleteFilm(Film aFilm) {
+	public boolean deleteFilm(Film film) {
+
 		String name = "student";
 		String pwd = "student";
-		Connection conn = null;
 
-		try {
-			conn = DriverManager.getConnection(URL, name, pwd);
-			// start transaction
+		try (Connection conn = DriverManager.getConnection(URL, name, pwd)) {
 			conn.setAutoCommit(false);
 
-			// film_actor is a child of (depends upon) both actor and film tables
-			String sql = "DELETE FROM film WHERE id = ?";
-			PreparedStatement stmt = conn.prepareStatement(sql);
-			stmt.setInt(1, aFilm.getId());
-			
-			int affectRows = stmt.executeUpdate();
-			
-			if(affectRows == 0) {
-				conn.rollback();
-				return false; 
-			}
+			String deleteFilmSql = "DELETE FROM film WHERE id = ?";
+			try (PreparedStatement stmt = conn.prepareStatement(deleteFilmSql)) {
+				stmt.setInt(1, film.getId());
 
-//			conn.commit();
-			
+				int rowsAffected = stmt.executeUpdate();
+
+				if (rowsAffected == 0) {
+					conn.rollback();
+					return false; // No film found with this ID
+				}
+
+				conn.commit();
+				return true;
+
+			} catch (SQLException e) {
+				conn.rollback();
+				e.printStackTrace();
+				return false;
+			}
 		} catch (SQLException sqle) {
 			sqle.printStackTrace();
-			if (conn != null) {
-				try {
-					conn.rollback();
-				} catch (SQLException sqle2) {
-					return false;
-				} finally {
-					try {
-						conn.close();
-					} catch (SQLException e) {
-						// TODO Auto-generated catch block
-						e.printStackTrace();
-					}
-				}
-			}
+			return false;
 		}
-		return true;
-
 	}
+	
+	@Override
+	public boolean updateFilm(Film aFilm) {
+		String name = "student";
+	    String pwd = "student";
+
+	    String updateFilmSql = "UPDATE film SET title = ?, description = ? WHERE id = ?";
+	    
+	    try (Connection conn = DriverManager.getConnection(URL, name, pwd)) {
+	        conn.setAutoCommit(false);
+
+	        try (PreparedStatement stmt = conn.prepareStatement(updateFilmSql)) {
+	            // Set the title and description parameters based on the provided Film object
+	            stmt.setString(1, aFilm.getTitle());
+	            stmt.setString(2, aFilm.getDescription());
+	            stmt.setInt(3, aFilm.getId());
+
+	            int rowsAffected = stmt.executeUpdate();
+
+	            if (rowsAffected == 0) {
+	                conn.rollback();
+	                return false; // No film found with this ID
+	            }
+
+	            conn.commit();
+	            return true;
+
+	        } catch (SQLException e) {
+	            conn.rollback();
+	            e.printStackTrace();
+	            return false;
+	        }
+	    } catch (SQLException sqle) {
+	        sqle.printStackTrace();
+	        return false;
+	    }
+	}
+	
+	
+	
+
+	@Override
+	public Actor createActor(Actor actor) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public boolean saveActor(Actor actor) {
+		// TODO Auto-generated method stub
+		return false;
+	}
+
+	
 }

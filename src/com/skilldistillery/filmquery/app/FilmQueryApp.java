@@ -50,7 +50,8 @@ public class FilmQueryApp {
 			System.out.println("2. Look up a film by a search keyword");
 			System.out.println("3. Add New Film");
 			System.out.println("4. Delete a Film");
-			System.out.println("5. Exit");
+			System.out.println("5. Update a Film");
+			System.out.println("6. Exit");
 
 			int menuSelection = input.nextInt();
 
@@ -115,7 +116,6 @@ public class FilmQueryApp {
 				double replacementCost = input.nextDouble();
 				input.nextLine();
 
-				
 				Film newFilm = new Film(title, rentalRate, replacementCost);
 				Film createdFilm = db.createFilm(newFilm);
 
@@ -128,10 +128,56 @@ public class FilmQueryApp {
 				}
 				break;
 			case 4:
-				System.out.println("Delete");
-				
-				break; 
+				System.out.println("Please enter the flm ID to delete: ");
+				int filmIdToDelete = input.nextInt();
+				Film filmToDelete = db.findFilmById(filmIdToDelete);
+
+				if (filmToDelete == null) {
+					System.out.println("Film with the ID: " + filmToDelete + " does not exist");
+				} else {
+					boolean success = db.deleteFilm(filmToDelete);
+					if (success) {
+						System.out.println("Film deletion test completed successfully (rollback performed).");
+					} else {
+						System.out.println("Film deletion test failed");
+					}
+
+				}
+
+				break;
 			case 5:
+				 System.out.println("Please enter the film id to update: ");
+	                int filmIdToUpdate = input.nextInt();
+	                Film filmToUpdate = db.findFilmById(filmIdToUpdate);
+
+	                if (filmToUpdate == null) {
+	                    System.out.println("Film with ID " + filmIdToUpdate + " does not exist.");
+	                } else {
+	                    System.out.println("Current Title: " + filmToUpdate.getTitle());
+	                    System.out.print("Enter new title (or press Enter to keep the current title): ");
+	                    input.nextLine();  // Consume the remaining newline
+	                    String newTitle = input.nextLine();
+	                    if (!newTitle.trim().isEmpty()) {
+	                        filmToUpdate.setTitle(newTitle);
+	                    }
+
+	                    System.out.println("Current Description: " + filmToUpdate.getDescription());
+	                    System.out.print("Enter new description (or press Enter to keep the current description): ");
+	                    String newDescription = input.nextLine();
+	                    if (!newDescription.trim().isEmpty()) {
+	                        filmToUpdate.setDescription(newDescription);
+	                    }
+
+	                    boolean updateSuccess = db.updateFilm(filmToUpdate);
+
+	                    if (updateSuccess) {
+	                        System.out.println("Film updated successfully!");
+	                    } else {
+	                        System.out.println("Failed to update film.");
+	                    }
+	                }
+	                break;
+			case 6:
 				System.out.println();
 				System.out.println("Exiting.... \nGoodBye");
 				running = false;
