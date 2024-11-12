@@ -246,7 +246,7 @@ public class DatabaseAccessorObject implements DatabaseAccessor {
 
 
 	@Override
-	public boolean deleteFilm(Film film) {
+	public boolean deleteFilm(Film afilm) {
 
 		String name = "student";
 		String pwd = "student";
@@ -256,7 +256,7 @@ public class DatabaseAccessorObject implements DatabaseAccessor {
 
 			String deleteFilmSql = "DELETE FROM film WHERE id = ?";
 			try (PreparedStatement stmt = conn.prepareStatement(deleteFilmSql)) {
-				stmt.setInt(1, film.getId());
+				stmt.setInt(1, afilm.getId());
 
 				int rowsAffected = stmt.executeUpdate();
 
